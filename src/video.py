@@ -6,6 +6,10 @@ load_dotenv()
 
 
 class Video:
+    """
+    Класс Видео ютуб канала.
+    """
+
     def __init__(self, video_id):
         self.__video_id = video_id
         youtube = self.get_service()
@@ -37,9 +41,12 @@ class Video:
 
 
 class PLVideo(Video):
+    """
+    Класс Плейлист ютуб канала.
+    """
+
     def __init__(self, video_id, playlist_id):
         super().__init__(video_id)
         self.__playlist_id = playlist_id
         youtube = self.get_service()
         self.playlist_response = youtube.playlists().list(part="snippet", id=self.__playlist_id).execute()
-
