@@ -12,14 +12,17 @@ class Video:
 
     def __init__(self, video_id):
         self.__video_id = video_id
-        youtube = self.get_service()
-        video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
-                                               id=self.__video_id
-                                               ).execute()
-        self.video_title: str = video_response['items'][0]['snippet']['title']
-        self.video_url = "https://www.youtube.com/watch?v=" + self.__video_id
-        self.view_count: int = video_response['items'][0]['statistics']['viewCount']
-        self.like_count: int = video_response['items'][0]['statistics']['likeCount']
+        try:
+            youtube = self.get_service()
+            video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
+                                                   id=self.__video_id
+                                                   ).execute()
+            self.title: str = video_response['items'][0]['snippet']['title']
+            self.video_url = "https://www.youtube.com/watch?v=" + self.__video_id
+            self.view_count: int = video_response['items'][0]['statistics']['viewCount']
+            self.like_count: int = video_response['items'][0]['statistics']['likeCount']
+        except IndexError:
+            self.title, self.video_url, self.view_count, self.like_count = (None,) * 4
 
     @classmethod
     def get_service(cls):
@@ -37,7 +40,7 @@ class Video:
         return os.getenv('API_KEY_YOUTUBE')
 
     def __str__(self):
-        return self.video_title
+        return self.title
 
 
 class PLVideo(Video):
